@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Infinite Craft Memorizer</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <script src="script.js"></script>
+    <div class="mainCont">
+      <h2>Infinite Craft Memorizer</h2>
+      <div id="searchBarCont">
+      <input type="text" id="search" placeholder="Search for items.."><br>
+      <button id="goToImportPage">📥 Import item list</button>
+      <button id="goToExportPage">📤 Export item list</button>
+      </div>
+      <div id="itemList"></div>
+    </div>
+    <div class="importCont">
+      <button id="closeImportPage">↩️</button>
+      <h3>Import item list</h3>
+      <p>Copy and paste the item list here. It will be merged with the currently saved items, so you won't lose anything!</p>
+      <textarea id="importArea" placeholder="Paste item list here.."></textarea>
+      <button id="importItems">Import</button>
+    </div>
+    <div class="exportCont">
+      <button id="closeExportPage">↩️</button>
+      <h3>Export item list</h3>
+      <p>Copy the item list from here. You can then save it to a file or share it with others!</p>
+      <textarea id="exportArea" placeholder="Exported item list will appear here.."></textarea>
+    </div>
+    <div class="itemCont">
+      <button id="closeItemPage">↩️</button>
+      <h3>Item details :</h3>
+      <h2 id="itemName"></h2>
+      <p>Can be creating by fusing the following items :</p>
+      <div id="itemFusionList"></div>
+    </div>
+  </body>
+</html>

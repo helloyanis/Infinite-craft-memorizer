@@ -1,0 +1,19 @@
+html{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #333;
+}
+.importCont, .exportCont, .itemCont{
+    display: none;
+}
+.mainCont{
+    display: block;
+}
+#searchBarCont{
+    display: flex;
+    justify-content: right;
+    margin: 20px 0 20px 0;
+
+}

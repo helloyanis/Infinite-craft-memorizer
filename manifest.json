@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Infinite Craft memorizer",
+  "version": "1.0",
+
+  "description": "A utility to remember how to get specific items in infinite craft",
+  "page_action": {
+    "show_matches": ["https://neal.fun/infinite-craft/"],
+    "default_title": "Open panel",
+    "default_popup": "./index.html",
+    "default_icon": {
+      "19": "./icons/nodes.svg",
+      "38": "./icons/nodes.svg"
+    }
+  },
+  "background": {
+    "scripts": [
+      "readWebRequests.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "webRequestFilterResponse",
+    "https://neal.fun/infinite-craft/",
+    "https://neal.fun/api/infinite-craft/pair"
+  ]
+
+}
