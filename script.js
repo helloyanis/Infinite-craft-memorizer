@@ -169,20 +169,29 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.querySelector("#importItems").addEventListener("click", () => {
     /*
-      Imports the data from the import textarea and stores it in the add-on's localStorage
+      Imports the data from the import textarea and merges it with the add-on's localStorage
     */
     let importData = document.querySelector("#importArea").value;
     try {
       let data = JSON.parse(importData);
       data.forEach((item) => {
         LS.get(item.text).then((res) => {
-          res=JSON.parse(res[item.text])
-          console.log(res)
-          fusionData = item.fusions;
-          if(fusionData == [undefined]){
+          try {
+            let existingData;
+            if(!res[item.text]){
+              existingData = { emoji: item.emoji, text: item.text, fusions: [] };
+            }else{
+              existingData = JSON.parse(res[item.text]);
+            }
+            let fusionData = item.fusions;
+            console.log(existingData);
+            console.log(fusionData);
+            // Merge existing fusions with new fusions, avoiding duplicates
+            existingData.fusions = mergeFusions(existingData.fusions, fusionData);
+            LS.set({ [item.text]: JSON.stringify(existingData) });
+          } catch (e) {
+            console.error(e);
             LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [] }) });
-          }else{
-            LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [...fusionData,...res.fusions] }) });
           }
         });
       });
@@ -195,6 +204,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
       document.querySelector("#importItems").textContent = "❌ Error!";
     }
   });
+
+  // Function to merge fusion arrays without duplicates
+  function mergeFusions(existingFusions, newFusions) {
+    // Remove duplicates from newFusions
+    newFusions = newFusions.filter((fusion, index, self) =>
+      index === self.findIndex((t) => t.first === fusion.first && t.second === fusion.second)
+    );
+
+    // Merge existingFusions and newFusions
+    existingFusions = existingFusions.concat(newFusions);
+
+    return existingFusions;
+  }
+
 
   document.querySelector("#closeExportPage").addEventListener("click", () => {
     /*
