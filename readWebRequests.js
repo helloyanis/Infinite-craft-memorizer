@@ -22,8 +22,10 @@ function listener(details) {
                 LS.set({ [`${res.result}`]: JSON.stringify({ emoji: res.emoji, text: res.result, fusions: [{first: first, second: second}] }) });
             }else{
                 let item = JSON.parse(res2[res.result]);
-                item.fusions.push({first: first, second: second});
-                LS.set({ [`${res.result}`]: JSON.stringify(item) });
+                if(!item.fusions.some(fusion => fusion.first == first && fusion.second == second)){
+                    item.fusions.push({first: first, second: second});
+                    LS.set({ [`${res.result}`]: JSON.stringify(item) });
+                }
             }
             
         });

@@ -11,9 +11,10 @@
     <div class="mainCont">
       <h2>Infinite Craft Memorizer</h2>
       <div id="searchBarCont">
-      <input type="text" id="search" placeholder="Search for items.."><br>
+      <input type="text" id="search" placeholder="Search for items...">
       <button id="goToImportPage">📥 Import item list</button>
       <button id="goToExportPage">📤 Export item list</button>
+      <button id="goToBuildItemPage">🔨 Create item</button>
       </div>
       <div id="itemList"></div>
     </div>
@@ -21,14 +22,14 @@
       <button id="closeImportPage">↩️</button>
       <h3>Import item list</h3>
       <p>Copy and paste the item list here. It will be merged with the currently saved items, so you won't lose anything!</p>
-      <textarea id="importArea" placeholder="Paste item list here.."></textarea>
+      <textarea id="importArea" placeholder="Paste item list here..."></textarea>
       <button id="importItems">Import</button>
     </div>
     <div class="exportCont">
       <button id="closeExportPage">↩️</button>
       <h3>Export item list</h3>
       <p>Copy the item list from here. You can then save it to a file or share it with others!</p>
-      <textarea id="exportArea" placeholder="Exported item list will appear here.."></textarea>
+      <textarea id="exportArea" placeholder="Exported item list will appear here."></textarea>
     </div>
     <div class="itemCont">
       <button id="closeItemPage">↩️</button>
@@ -36,6 +37,15 @@
       <h2 id="itemName"></h2>
       <p>Can be created by fusing the following items :</p>
       <div id="itemFusionList"></div>
+    </div>
+    <div class="buildItemCont">
+      <button id="closeBuildItemPage">↩️</button>
+      <h3>Build item :</h3>
+      <p>Create any item you want!<br>Tip: Use Windows + ; to open the emoji keyboard.</p><br>
+      <input type="text" id="itemEmoji" placeholder="Emoji">
+      <input type="text" id="itemNameInput" placeholder="Name">
+      <button id="buildItem">Create!</button>
+      <div><button id="buildAllItems">Build all items in add-on database</button></div>
     </div>
   </body>
 </html>

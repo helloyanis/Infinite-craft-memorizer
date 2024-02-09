@@ -17,7 +17,6 @@ async function isItemAlreadyStored(myItem) {
     Returns true if the item is already found in the add-on's localStorage
   */
   const res = await LS.get(`${myItem.text}`)
-  console.log(res);
   if (Object.keys(res).length === 0) {
     return true;
   } else {
@@ -35,7 +34,6 @@ async function getExportData() {
     Object.keys(res).forEach((key) => {
       data.push(JSON.parse(res[key]));
     });
-    console.log(JSON.stringify(data));
     return JSON.stringify(data);
   } catch (error) {
     console.error("Error getting export data:", error);
@@ -57,6 +55,41 @@ async function storeAllItems() {
   });
 }
 
+async function restoreAllItems() {
+  /*
+    Goes through all items from the add-on's localStorage and stores them in the website's localStorage if the're not already there
+  */
+  const res = await LS.get(null);
+  Object.keys(res).forEach(async (key) => {
+    let item = JSON.parse(res[key]);
+    console.log(item);
+    if (!isItemAlreadyFound(item)) {
+      await createItem(item);
+    }
+  });
+
+}
+
+async function createItem(myItem) {
+  /*
+    Creates a new item on the page and saves it to the page's localStorage
+  */
+  let newElement = {
+    text: myItem.text,
+    emoji: myItem.emoji,
+    discovered: false
+  };
+  if(!isItemAlreadyFound(myItem)){
+    await browser.tabs.executeScript({code: `
+    localData=JSON.parse(localStorage["infinite-craft-data"])
+    localData.elements.push(${JSON.stringify(myItem)})
+    localStorage.setItem("infinite-craft-data", JSON.stringify(localData))
+    `});
+  }
+}
+
+const regexEmoji = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+
 //Page functions
 document.addEventListener("DOMContentLoaded", (event) => {
   function goToItemPage(myItem) {
@@ -68,7 +101,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.querySelector("#itemName").textContent = `${myItem.emoji} ${myItem.text}`;
     document.querySelector("#itemFusionList").innerHTML = "";
     LS.get(myItem.text).then((itemData) => {
-      console.log(itemData);
       JSON.parse(itemData[myItem.text]).fusions.forEach((fusion) => {
         let firstButton = document.createElement("button");
         firstButton.textContent = fusion.first;
@@ -140,7 +172,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       Imports the data from the import textarea and stores it in the add-on's localStorage
     */
     let importData = document.querySelector("#importArea").value;
-    console.log(importData);
     try {
       let data = JSON.parse(importData);
       data.forEach((item) => {
@@ -163,6 +194,51 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.querySelector(".mainCont").style.display = "block";
   });
 
+  document.querySelector("#goToBuildItemPage").addEventListener("click", () => {
+    /*
+      Changes the page to the build item page
+    */
+    document.querySelector(".buildItemCont").style.display = "block";
+    document.querySelector(".mainCont").style.display = "none";
+  });
+
+  document.querySelector("#buildItem").addEventListener("click", () => {
+    /*
+      Builds a new item on the page and stores it in the add-on's localStorage
+    */
+    let emoji = document.querySelector("#itemEmoji").value
+    if (!regexEmoji.test(emoji)){
+      return document.querySelector("#buildItem").textContent = "❌ Not an emoji";;
+    }
+    let text = document.querySelector("#itemNameInput").value
+    if (text === "") {
+      return document.querySelector("#buildItem").textContent = "❌ No name";
+    }
+    let myItem = { emoji: emoji, text: text, fusions: [] };
+    (async () => {
+        await createItem(myItem);
+        document.querySelector("#buildItem").textContent = "✅ Item created! Refresh the page.";
+    })();
+  });
+
+  document.querySelector("#buildAllItems").addEventListener("click", () => {
+    /*
+      Builds all of the items in the database of the add-on
+    */
+    (async () => {
+      await restoreAllItems();
+      document.querySelector("#buildAllItems").textContent = "✅ All items created! Refresh the page.";
+    })();
+  })
+
+  document.querySelector("#closeBuildItemPage").addEventListener("click", () => {
+    /*
+      Closes the build item page and goes back to the main page
+    */
+    document.querySelector(".buildItemCont").style.display = "none";
+    document.querySelector(".mainCont").style.display = "block";
+  });
+
   function listPageItems() {
     /*
       Lists all the items from the website's localStorage and adds them to the main page
@@ -175,7 +251,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         */
         Object.keys(res).forEach((key) => {
           let item = JSON.parse(res[key]);
-          console.log(key, item);
           if (!data.elements.some((element) => element.text === item.text)) {
             data.elements.push(item);
           }

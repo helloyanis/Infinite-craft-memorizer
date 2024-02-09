@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Infinite Craft memorizer",
-  "version": "1.2",
+  "name": "Infinite Craft toolkit",
+  "version": "2.0",
 
-  "description": "A utility to remember how to get specific items in infinite craft",
+  "description": "A utility to remember how to get specific items in infinite craft, and create the items you want.",
   "page_action": {
     "show_matches": ["https://neal.fun/infinite-craft/"],
     "default_title": "Open panel",
@@ -25,6 +25,7 @@
     "webRequest",
     "webRequestBlocking",
     "webRequestFilterResponse",
+    "scripting",
     "https://neal.fun/infinite-craft/",
     "https://neal.fun/api/infinite-craft/pair"
   ]

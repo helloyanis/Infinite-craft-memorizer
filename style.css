@@ -5,13 +5,13 @@ html{
     color: #fff;
     background-color: #333;
 }
-.importCont, .exportCont, .itemCont{
+.importCont, .exportCont, .itemCont, .buildItemCont{
     display: none;
 }
 .mainCont{
     display: block;
 }
-#searchBarCont{
+#searchBarCont, #buildAllItems{
     display: flex;
     justify-content: right;
     margin: 20px 0 20px 0;
