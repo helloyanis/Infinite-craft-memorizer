@@ -175,12 +175,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     try {
       let data = JSON.parse(importData);
       data.forEach((item) => {
-        fusionData = item.fusions;
-        if(fusionData == [undefined]){
-          LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [] }) });
-        }else{
-          LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: fusionData }) });
-        }
+        LS.get(item.text).then((res) => {
+          res=JSON.parse(res[item.text])
+          console.log(res)
+          fusionData = item.fusions;
+          if(fusionData == [undefined]){
+            LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [] }) });
+          }else{
+            LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [...fusionData,...res.fusions] }) });
+          }
+        });
       });
       listPageItems();
       document.querySelector("#importItems").textContent = "✅ Imported!";
