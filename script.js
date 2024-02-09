@@ -175,8 +175,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     try {
       let data = JSON.parse(importData);
       data.forEach((item) => {
-        LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [] }) });
+        fusionData = item.fusions;
+        if(fusionData == [undefined]){
+          LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: [] }) });
+        }else{
+          LS.set({ [item.text]: JSON.stringify({ emoji: item.emoji, text: item.text, fusions: fusionData }) });
+        }
       });
+      listPageItems();
       document.querySelector("#importItems").textContent = "✅ Imported!";
       setTimeout(() => {
         document.querySelector("#importItems").textContent = "Import";
@@ -243,6 +249,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     /*
       Lists all the items from the website's localStorage and adds them to the main page
     */
+   document.querySelector("#itemList").innerHTML = "";
     browser.tabs.executeScript({ code: `localStorage["infinite-craft-data"]` }).then((res) => {
       data = JSON.parse(res)
       LS.get(null).then((res) => {
