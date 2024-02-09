@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Infinite Craft memorizer",
-  "version": "2.2",
+  "version": "2.3",
 
   "description": "A utility to remember how to get specific items in infinite craft, and create the items you want.",
   "page_action": {
