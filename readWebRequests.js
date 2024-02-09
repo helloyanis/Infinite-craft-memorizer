@@ -11,10 +11,13 @@ function listener(details) {
         filter.write(event.data);
         filter.disconnect();
         console.log(res);
-        if(res.result=="Nothing") return;
+        if(res.result=="Nothing") return; //In case the items don't merge
         const first = findGetParameter("first",details.url);
         const second = findGetParameter("second",details.url);
         LS.get(res.result).then((res2) => {
+            /*
+                Adds the result of the fusion into the add-on's localStorage
+            */
             if(res2[res.result] == undefined){
                 LS.set({ [`${res.result}`]: JSON.stringify({ emoji: res.emoji, text: res.result, fusions: [{first: first, second: second}] }) });
             }else{
@@ -29,6 +32,9 @@ function listener(details) {
     return {};
 }
 function findGetParameter(parameterName, myUrl) {
+    /*
+        Utility function to extract the GET parameters to the API (to know what both items are being fused)
+    */
     let result = null,
         tmp = [];
     myUrl
