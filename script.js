@@ -2,13 +2,18 @@ const LS = browser.storage.local;
 //Utility functions
 function isItemAlreadyFound(myItem) {
   /*
-    Returns true if the item is already found in the website's localStorage
+    Returns a Promise that resolves to true if the item is already found in the website's localStorage
   */
-  browser.tabs.executeScript({ code: `localStorage["infinite-craft-data"]` }).then((res) => {
-    data = JSON.parse(res)
-    return (data.elements.some(item =>
-      Object.keys(myItem).every(key => item[key] === myItem[key])
-    ));
+  myItem = { emoji: myItem.emoji, text: myItem.text };
+
+  return new Promise((resolve) => {
+    browser.tabs.executeScript({ code: `localStorage["infinite-craft-data"]` }).then((res) => {
+      const data = JSON.parse(res);
+      const isFound = data.elements.some(item =>
+        Object.keys(myItem).every(key => item[key] === myItem[key])
+      );
+      resolve(isFound);
+    });
   });
 }
 
@@ -63,9 +68,7 @@ async function restoreAllItems() {
   Object.keys(res).forEach(async (key) => {
     let item = JSON.parse(res[key]);
     console.log(item);
-    if (!isItemAlreadyFound(item)) {
-      await createItem(item);
-    }
+    createItem(item);
   });
 
 }
@@ -79,13 +82,16 @@ async function createItem(myItem) {
     emoji: myItem.emoji,
     discovered: false
   };
-  if(!isItemAlreadyFound(myItem)){
+  isItemAlreadyFound(myItem).then(async (isFound) => {
+    console.log("isFound", isFound);
+    if (!isFound) {
     await browser.tabs.executeScript({code: `
     localData=JSON.parse(localStorage["infinite-craft-data"])
     localData.elements.push(${JSON.stringify(myItem)})
     localStorage.setItem("infinite-craft-data", JSON.stringify(localData))
     `});
-  }
+    }
+  });
 }
 
 const regexEmoji = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
