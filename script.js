@@ -329,6 +329,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
     });
   });
+
+  document.querySelector("#resetData").addEventListener("click", () => {
+    /*
+      Resets the add-on's localStorage
+    */
+    if(confirm("This will delete ALL ITEMS and ALL RECIPIES in the add-on (not the website's). Are you sure?")){
+      LS.clear();
+      listPageItems();
+    }
+  });
+
   listPageItems();
 });
 
