@@ -6,7 +6,7 @@
   "description": "A utility to remember how to get specific items in infinite craft, and create the items you want.",
   "page_action": {
     "show_matches": ["https://neal.fun/infinite-craft/"],
-    "default_title": "Open panel",
+    "default_title": "Open Infinite Craft Memorizer",
     "default_popup": "./index.html",
     "default_icon": {
       "19": "./icons/nodes.svg",
